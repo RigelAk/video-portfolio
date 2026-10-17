@@ -74,9 +74,7 @@ a:hover { color: var(--accent); }
   100% { transform: translate(0, 0); }
 }
 
-/* ========================================================
-   Header & Анимированный Бургер
-   ======================================================== */
+/* Header & Бургер */
 .site-header {
   position: fixed;
   top: 0;
@@ -382,6 +380,7 @@ a:hover { color: var(--accent); }
   background: linear-gradient(180deg, var(--accent) 0%, #ff8533 100%);
   box-shadow: 0 0 12px var(--accent-glow);
   will-change: height;
+  transition: height 0.45s cubic-bezier(0.25, 1, 0.5, 1);
 }
 .prod-timeline__playhead {
   position: absolute;
@@ -396,6 +395,8 @@ a:hover { color: var(--accent); }
   z-index: 5;
   pointer-events: none;
   will-change: top;
+  /* Плавное примагничивание (Easy-Ease) */
+  transition: top 0.45s cubic-bezier(0.25, 1, 0.5, 1);
 }
 .prod-timeline__playhead::after {
   content: '';
@@ -413,7 +414,7 @@ a:hover { color: var(--accent); }
   position: relative;
   display: flex;
   align-items: flex-start;
-  margin-bottom: 60px;
+  margin-bottom: 70px;
   width: 100%;
   transition: opacity 0.35s ease;
 }
@@ -547,9 +548,7 @@ a:hover { color: var(--accent); }
   padding-left: 14px;
 }
 
-/* ========================================================
-   Portfolio Fan
-   ======================================================== */
+/* Portfolio Fan */
 .portfolio-wrapper { position: relative; width: 100%; z-index: 2; }
 .portfolio {
   position: relative;
@@ -954,36 +953,27 @@ body.no-scroll { overflow: hidden; }
   .portfolio .card::after { font-size: 12px; padding: 6px 10px; left: 8px; right: 8px; bottom: 8px; }
   .video-close { top: 12px; right: 12px; width: 40px; height: 40px; font-size: 22px; }
 
-  /* ===================================================
-     ИСПРАВЛЕНИЯ МОБИЛЬНОГО ТАЙМЛАЙНА
-     Единая ось 20px для полосы, стрелки и маркеров.
-     Отключен transition для устранения лагов и дрожания.
-     =================================================== */
+  /* Таймлайн на мобильных */
   .prod-timeline { padding: 20px 0; }
   
   .prod-timeline__track { 
-    left: 20px; 
-    transform: translateX(-50%); 
-  }
-  
-  .prod-timeline__bar {
-    transition: none !important;
+    left: 20px !important; 
+    transform: translateX(-50%) !important; 
   }
   
   .prod-timeline__playhead { 
-    left: 20px; 
-    transform: translate(-50%, -50%); 
-    transition: none !important; 
+    left: 50% !important; 
+    transform: translate(-50%, -50%) !important; 
   }
   
   .prod-step {
-    margin-bottom: 40px;
+    margin-bottom: 44px;
     justify-content: flex-start !important;
   }
   
   .prod-step__marker {
-    left: 20px;
-    transform: translateX(-50%);
+    left: 20px !important;
+    transform: translateX(-50%) !important;
   }
   
   .prod-step__content {

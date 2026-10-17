@@ -100,15 +100,16 @@ document.querySelectorAll('.fade-in-up').forEach((el) => io.observe(el));
 })();
 
 // ========================================================
-// Интерактивный Timeline с Playhead (Оптимизирован для мобильных)
+// Интерактивный Timeline с Playhead (С примагничиванием по easy-ease)
 // ========================================================
 (function initTimeline() {
   const timeline = document.getElementById('prodTimeline');
+  const track = document.querySelector('.prod-timeline__track');
   const bar = document.getElementById('timelineBar');
   const playhead = document.getElementById('timelinePlayhead');
   const steps = document.querySelectorAll('.prod-step');
 
-  if (!timeline || !bar || !playhead || !steps.length) return;
+  if (!timeline || !track || !bar || !playhead || !steps.length) return;
 
   steps.forEach((step) => {
     const content = step.querySelector('.prod-step__content');
@@ -128,47 +129,65 @@ document.querySelectorAll('.fade-in-up').forEach((el) => io.observe(el));
   });
 
   function updateTimelinePlayhead() {
-    const firstStep = steps[0];
-    const lastStep = steps[steps.length - 1];
-    if (!firstStep || !lastStep) return;
+    const trackRect = track.getBoundingClientRect();
+    const trackHeight = trackRect.height;
+    if (trackHeight <= 0) return;
 
-    const firstMarker = firstStep.querySelector('.prod-step__marker');
-    const lastMarker = lastStep.querySelector('.prod-step__marker');
-    if (!firstMarker || !lastMarker) return;
-
-    const firstRect = firstMarker.getBoundingClientRect();
-    const lastRect = lastMarker.getBoundingClientRect();
-    const winHeight = window.innerHeight;
-
-    const triggerStart = winHeight * 0.50;
-    const triggerEnd = winHeight * 0.48;
-
-    const totalScrollDist = (lastRect.top - firstRect.top) + (triggerStart - triggerEnd);
-    const scrolled = triggerStart - firstRect.top;
-
-    let progress = scrolled / totalScrollDist;
-    progress = Math.max(0, Math.min(1, progress));
-
-    const percent = progress * 100;
-    bar.style.height = `${percent}%`;
-    playhead.style.top = `${percent}%`;
-
-    const playheadRect = playhead.getBoundingClientRect();
-
-    steps.forEach((step) => {
+    // Рассчитываем точные относительные позиции маркеров (в %)
+    const stepPositions = [];
+    steps.forEach((step, idx) => {
       const marker = step.querySelector('.prod-step__marker');
       if (marker) {
         const markerRect = marker.getBoundingClientRect();
-        if (playheadRect.bottom >= markerRect.top + 6) {
-          step.classList.add('passed');
-        } else {
-          step.classList.remove('passed');
-        }
+        const markerCenterY = (markerRect.top + markerRect.height / 2) - trackRect.top;
+        const pct = Math.max(0, Math.min(100, (markerCenterY / trackHeight) * 100));
+        stepPositions.push({ idx, pct, markerTop: markerRect.top });
+      }
+    });
+
+    if (!stepPositions.length) return;
+
+    const winHeight = window.innerHeight;
+    const triggerY = winHeight * 0.5; // Триггерная линия экрана
+
+    // Определяем шаг, к которому ближе всего текущая прокрутка
+    let closestStep = stepPositions[0];
+    let minDistance = Infinity;
+
+    stepPositions.forEach((pos) => {
+      const dist = Math.abs(pos.markerTop - triggerY);
+      if (dist < minDistance) {
+        minDistance = dist;
+        closestStep = pos;
+      }
+    });
+
+    // Магнитная привязка: если мы до первого шага — стоим на первом, если после последнего — на последнем
+    const firstStep = stepPositions[0];
+    const lastStep = stepPositions[stepPositions.length - 1];
+
+    let targetPercent = closestStep.pct;
+    if (firstStep.markerTop > triggerY) {
+      targetPercent = firstStep.pct;
+    } else if (lastStep.markerTop < triggerY) {
+      targetPercent = lastStep.pct;
+    }
+
+    // Применяем позицию с аппаратным CSS-переходом easy ease
+    bar.style.height = `${targetPercent}%`;
+    playhead.style.top = `${targetPercent}%`;
+
+    // Подсвечиваем пройденные и текущие шаги
+    stepPositions.forEach((pos) => {
+      const stepEl = steps[pos.idx];
+      if (pos.pct <= targetPercent + 0.5) {
+        stepEl.classList.add('passed');
+      } else {
+        stepEl.classList.remove('passed');
       }
     });
   }
 
-  // Оптимизация через requestAnimationFrame: исключает фризы при тач-скролле
   let ticking = false;
   function requestUpdate() {
     if (!ticking) {
