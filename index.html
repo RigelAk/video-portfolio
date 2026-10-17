@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <link rel="icon" type="image/png" sizes="420x420" href="assets/favicon-420.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon-420.png">
+  <meta name="theme-color" content="#0f1012">
+
+  <title>AKHMEDOV — Выставочный видеограф</title>
+  <meta content="Съемка стендов, динамичные отчетные ролики и медиа-контент для участников выставок от видеографа Akhmedov." name="description"/>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;700;800&display=swap" rel="stylesheet"/>
+  <link href="styles.css" rel="stylesheet"/>
+</head>
+<body>
+
+<div class="bg">
+  <canvas id="geo"></canvas>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+</div>
+
+<header class="site-header" id="header">
+  <div class="header__inner container">
+    <a class="logo" href="#top" id="siteLogo">AKHMEDOV<span class="logo__dot">.</span></a>
+    
+    <nav class="nav" id="siteNav">
+      <a class="nav__link" href="#services">Процесс</a>
+      <a class="nav__link" href="#portfolio">Портфолио</a>
+      <a class="nav__link" href="#why">Преимущества</a>
+      <a class="btn btn--ghost nav__link nav__cta" href="#contacts">Обсудить проект</a>
+    </nav>
+
+    <!-- Анимированный Бургер в Крестик -->
+    <label class="hamburger" aria-label="Открыть меню">
+      <input type="checkbox" id="burgerToggle" aria-expanded="false"/>
+      <svg viewBox="0 0 32 32">
+        <path class="line line-top-bottom" d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"></path>
+        <path class="line line-mid" d="M7 16 27 16"></path>
+      </svg>
+    </label>
+  </div>
+</header>
+<div class="header-spacer"></div>
+
+<!-- Hero Section -->
+<section class="hero" id="top">
+  <div class="hero__video-wrap">
+    <video class="hero__video" autoplay muted loop playsinline poster="assets/p1.jpg">
+      <source src="assets/bg-reel.mp4" type="video/mp4"/>
+    </video>
+    <div class="hero__video-overlay"></div>
+  </div>
+
+  <div class="hero__content container fade-in-up">
+    <span class="hero__badge">Экспо-видеопроизводство</span>
+    <h1 class="hero__title">
+      Стенд работает дни.<br/>
+      <span class="accent">Видео — годами.</span>
+    </h1>
+    <p class="hero__subtitle">
+      Съемка выставочных стендов, динамичные репортажи и имиджевые промо-ролики, окупающие участие компании в экспозиции.
+    </p>
+    <div class="hero__cta">
+      <a class="animated-button" href="#contacts">
+        <span>Обсудить проект</span>
+        <span></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Анатомия идеального отчета: Интерактивный Timeline с Playhead -->
+<section class="section container" id="services">
+  <div class="section-head fade-in-up">
+    <h2 class="section__title">Анатомия идеального отчета</h2>
+    <p class="muted">Пошаговый процесс от первого брифа до готового мастер-ролика</p>
+  </div>
+
+  <div class="prod-timeline" id="prodTimeline">
+    <div class="prod-timeline__track">
+      <div class="prod-timeline__bar" id="timelineBar"></div>
+      <div class="prod-timeline__playhead" id="timelinePlayhead">
+        <span class="playhead-glow"></span>
+      </div>
+    </div>
+
+    <!-- Шаг 1 -->
+    <div class="prod-step left fade-in-up" data-step="1">
+      <div class="prod-step__marker">
+        <span class="marker-dot"></span>
+      </div>
+      <div class="prod-step__content">
+        <span class="prod-step__num">01</span>
+        <h3 class="prod-step__title">Бриф и договор <span class="step-toggle-arrow">↓</span></h3>
+        <div class="prod-step__body">
+          <p>Фиксируем дату выставки, тайминг стенда, задачи и хронометраж. Быстрый документооборот (ИП/ЭДО).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Шаг 2 -->
+    <div class="prod-step right fade-in-up" data-step="2">
+      <div class="prod-step__marker">
+        <span class="marker-dot"></span>
+      </div>
+      <div class="prod-step__content">
+        <span class="prod-step__num">02</span>
+        <h3 class="prod-step__title">Съёмка на площадке <span class="step-toggle-arrow">↓</span></h3>
+        <div class="prod-step__body">
+          <p>Архитектура и масштаб стенда с утра, плотный трафик и переговоры в часы пик, интервью со спикерами на петлички с шумоподавлением.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Шаг 3 -->
+    <div class="prod-step left fade-in-up" data-step="3">
+      <div class="prod-step__marker">
+        <span class="marker-dot"></span>
+      </div>
+      <div class="prod-step__content">
+        <span class="prod-step__num">03</span>
+        <h3 class="prod-step__title">Монтаж Reels / Shorts* <span class="step-toggle-arrow">↓</span></h3>
+        <div class="prod-step__body">
+          <p><em>*Опционально.</em> Экспресс-сборка вертикальных динамичных роликов прямо в дни выставки, пока инфоповод на пике.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Шаг 4 -->
+    <div class="prod-step right fade-in-up" data-step="4">
+      <div class="prod-step__marker">
+        <span class="marker-dot"></span>
+      </div>
+      <div class="prod-step__content">
+        <span class="prod-step__num">04</span>
+        <h3 class="prod-step__title">Сдача коротких форматов <span class="step-toggle-arrow">↓</span></h3>
+        <div class="prod-step__body">
+          <p>Передача готовых тизеров для мгновенной публикации в соцсетях бренда и отчётов перед руководством.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Шаг 5 -->
+    <div class="prod-step left fade-in-up" data-step="5">
+      <div class="prod-step__marker">
+        <span class="marker-dot"></span>
+      </div>
+      <div class="prod-step__content">
+        <span class="prod-step__num">05</span>
+        <h3 class="prod-step__title">Монтаж основного фильма <span class="step-toggle-arrow">↓</span></h3>
+        <div class="prod-step__body">
+          <p>Отбор лучших кадров, кинематографичный саунд-дизайн, плашки брендинга и цветокоррекция в точные цвета стенда.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Шаг 6 -->
+    <div class="prod-step right fade-in-up" data-step="6">
+      <div class="prod-step__marker">
+        <span class="marker-dot"></span>
+      </div>
+      <div class="prod-step__content">
+        <span class="prod-step__num">06</span>
+        <h3 class="prod-step__title">Утверждение и сдача ролика <span class="step-toggle-arrow">↓</span></h3>
+        <div class="prod-step__body">
+          <p>Просмотр черновика по ссылке, оперативная правка нюансов и финальная выдача мастер-файлов в 4K + веб-версий.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Portfolio Fan -->
+<section class="section container" id="portfolio">
+  <div class="section-head">
+    <h2 class="section__title">Портфолио</h2>
+    <p class="muted">Наведите или нажмите на стопку, затем кликните по работе — карточка развернётся и включит видео</p>
+  </div>
+  <div class="portfolio-wrapper">
+    <button aria-label="Закрыть" class="portfolio__close" id="portfolioClose">×</button>
+    <div class="portfolio glassless" id="fan">
+      <a class="card" data-title="МЕТАЛЛИСТ · Выставка 2026" data-video="1" href="https://vkvideo.ru/video-242062544_456239020" rel="noopener noreferrer" target="_blank"><img alt="МЕТАЛЛИСТ — Выставка 2026" loading="lazy" src="assets/pic1.jpg"/></a>
+      <a class="card" data-title="СПЕКТР-М · Крокус Экспо 2026" data-video="2" href="https://vkvideo.ru/video-242062544_456239019" rel="noopener noreferrer" target="_blank"><img alt="СПЕКТР-М — Крокус Экспо 2026" loading="lazy" src="assets/pic2.jpg"/></a>
+      <a class="card" data-title="EuroTruck · ComVex 2025" data-video="3" href="https://vkvideo.ru/video-242062544_456239023" rel="noopener noreferrer" target="_blank"><img alt="EuroTruck — Выставка ComVex 2025" loading="lazy" src="assets/pic3.jpg"/></a>
+      <a class="card" data-title="ТЕХНОПРОМ · 2026" data-video="4" href="https://vkvideo.ru/video-242062544_456239018" rel="noopener noreferrer" target="_blank"><img alt="ТЕХНОПРОМ 2026" loading="lazy" src="assets/pic4.jpg"/></a>
+      <a class="card" data-title="СПЕКТР-М · Конференция 2025" data-video="5" href="https://vkvideo.ru/video-242062544_456239017" rel="noopener noreferrer" target="_blank"><img alt="СПЕКТР-М — Конференция 2025" loading="lazy" src="assets/pic5.jpg"/></a>
+      <a class="card" data-title="МЕТАЛЛИСТ · ИНТЕГРАЦИЯ 2025" data-video="6" href="https://vkvideo.ru/video-242062544_456239021" rel="noopener noreferrer" target="_blank"><img alt="МЕТАЛЛИСТ — Выставка ИНТЕГРАЦИЯ 2025" loading="lazy" src="assets/pic6.jpg"/></a>
+      <a class="card" data-title="СПЕКТР-М · Крокус Экспо 2025" data-video="7" href="https://vkvideo.ru/video-242062544_456239024" rel="noopener noreferrer" target="_blank"><img alt="СПЕКТР-М — Крокус Экспо Выставка 2025" loading="lazy" src="assets/pic7.jpg"/></a>
+      <a class="card" data-title="ASGARD · Выставка 2025" data-video="8" href="https://vkvideo.ru/video-242062544_456239022" rel="noopener noreferrer" target="_blank"><img alt="ASGARD — Выставка 2025" loading="lazy" src="assets/pic8.jpg"/></a>
+      <div class="portfolio__caption"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Плеер ВК: затемнение фона и кнопка закрытия (сам плеер встраивается в карточку) -->
+<div class="video-backdrop" id="videoBackdrop"></div>
+<button aria-label="Закрыть видео" class="video-close" id="videoClose" type="button">×</button>
+
+<!-- Why -->
+<section class="section container" id="why">
+  <h2 class="section__title ta-center">Почему стенды доверяют мне</h2>
+  <div class="why-grid">
+    <div class="why__card glass fade-in-up">
+      <div class="why__num">1</div>
+      <h3>Работа со сложным светом</h3>
+      <p>Павильонный свет часто портит картинку. Использую оптику и сетап, вытягивающие геометрию стенда и чистоту цветов бренда.</p>
+    </div>
+    <div class="why__card glass fade-in-up">
+      <div class="why__num">2</div>
+      <h3>Сроки от 48 часов</h3>
+      <p>Первые нарезки для соцсетей и руководства вы получаете прямо во время выставки или в течение двух дней после демонтажа.</p>
+    </div>
+    <div class="why__card glass fade-in-up">
+      <div class="why__num">3</div>
+      <h3>Автономность на площадке</h3>
+      <p>Не отвлекаю стендистов от продаж. Сам координируюсь с таймингом ивента, ловя пиковые моменты переговоров и презентаций.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Contacts & Request Form -->
+<section class="section container" id="contacts">
+  <div class="contacts-wrap">
+    <div class="glass fade-in-up form-card">
+      <h2 class="section__title ta-center">Забронировать съемку</h2>
+      <p class="muted ta-center form-subtitle">Укажите выставку и даты проведения — я свяжусь с вами в течение пары часов</p>
+      
+      <form class="form" id="leadForm">
+        <div class="form-row">
+          <label>Имя
+            <input name="name" placeholder="Контактное лицо" required="" type="text"/>
+          </label>
+          <label>Телефон
+            <input name="tel" inputmode="tel" placeholder="+7 (999) 000-00-00" required="" type="tel"/>
+          </label>
+        </div>
+        <div class="form-row">
+          <label>Название выставки / Даты
+            <input name="event" placeholder="Например: Экспоцентр, 15-18 октября" type="text"/>
+          </label>
+          <label>Почта / Telegram 
+            <input name="contact" placeholder="@username или mail@company.ru" required="" type="text"/>
+          </label>
+        </div>
+        <label>Комментарий к задаче
+          <textarea name="message" placeholder="Какой стенд планируется, задачи по форматам или таймингу..." rows="3"></textarea>
+        </label>
+        
+        <div class="form-submit">
+          <button class="animated-button" type="submit">
+            <span>Отправить бриф</span>
+            <span></span>
+          </button>
+        </div>
+        <p aria-live="polite" class="muted tiny ta-center" id="formStatus" role="status"></p>
+      </form>
+    </div>
+
+    <!-- Direct Icons Bar -->
+    <div class="contacts-plain fade-in-up" id="contactsPlain">
+      <div class="containerbot">
+        <div class="center-block">
+          <ul class="example-2">
+            <li class="icon-content">
+              <a data-social="phone" aria-label="Phone" href="tel:+79152776286">
+                <div class="filled"></div>
+                <svg viewBox="0 0 24 24">
+                  <path fill="currentColor" d="M20,15.5C18.83,15.5 17.67,15.33 16.56,15C16.32,14.93 16.05,14.98 15.87,15.15L13.6,17.44C10.24,15.76 8.24,13.76 6.56,10.4L8.85,8.13C9.03,7.95 9.08,7.68 9,7.44C8.67,6.33 8.5,5.17 8.5,4C8.5,3.45 8.05,3 7.5,3H4C3.45,3 3,3.45 3,4C3,13.39 10.61,21 20,21C20.55,21 21,20.55 21,20V16.5C21,15.95 20.55,15.5 20,15.5Z"/>
+                </svg>
+              </a>
+              <div class="tooltip">Звонок</div>
+            </li>
+            <li class="icon-content">
+              <a data-social="email" aria-label="Email" href="mailto:akhmedovv.art@gmail.com">
+                <div class="filled"></div>
+                <svg viewBox="0 0 100 100" version="1.1">
+                  <path fill="currentColor" d="M10 20h80a5 5 0 0 1 5 5v50a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5V25a5 5 0 0 1 5-5zm0 5v2l40 28 40-28v-2H10zm0 50h80V34L50 62 10 34v41z"/>
+                </svg>
+              </a>
+              <div class="tooltip">Почта</div>
+            </li>
+            <li class="icon-content">
+              <a data-social="telegram" aria-label="Telegram" href="https://t.me/@rigelorigin">
+                <div class="filled"></div>
+                <svg viewBox="0 0 100 100" version="1.1">
+                  <path fill="currentColor" d="M95,9.9c-1.3-1.1-3.4-1.2-7-0.1c0,0,0,0,0,0c-2.5,0.8-24.7,9.2-44.3,17.3c-17.6,7.3-31.9,13.7-33.6,14.5 c-1.9,0.6-6,2.4-6.2,5.2c-0.1,1.8,1.4,3.4,4.3,4.7c3.1,1.6,16.8,6.2,19.7,7.1c1,3.4,6.9,23.3,7.2,24.5c0.4,1.8,1.6,2.8,2.2,3.2 c0.1,0.1,0.3,0.3,0.5,0.4c0.3,0.2,0.7,0.3,1.2,0.3c0.7,0,1.5-0.3,2.2-0.8c3.7-3,10.1-9.7,11.9-11.6c7.9,6.2,16.5,13.1,17.3,13.9 c0,0,0.1,0.1,0.1,0.1c1.9,1.6,3.9,2.5,5.7,2.5c0.6,0,1.2-0.1,1.8-0.3c2.1-0.7,3.6-2.7,4.1-5.4c0-0.1,0.1-0.5,0.3-1.2 c3.4-14.8,6.1-27.8,8.3-38.7c2.1-10.7,3.8-21.2,4.8-26.8c0.2-1.4,0.4-2.5,0.5-3.2C96.3,13.5,96.5,11.2,95,9.9z M30,58.3l47.7-31.6 c0.1-0.1,0.3-0.2,0.4-0.3c0,0,0,0,0,0c0.1,0,0.1-0.1,0.2-0.1c0.1,0,0.1,0,0.2-0.1c-0.1,0.1-0.2,0.4-0.4,0.6L66,38.1 c-8.4,7.7-19.4,17.8-26.7,24.4c0,0,0,0,0,0.1c0,0-0.1,0.1-0.1,0.1c0,0,0,0.1-0.1,0.1c0,0.1,0,0.1-0.1,0.2c0,0,0,0.1,0,0.1 c0,0,0,0,0,0.1c-0.5,5.6-1.4,15.2-1.8,19.5c0,0,0,0,0-0.1C36.8,81.4,31.2,62.3,30,58.3z"/>
+                </svg>
+              </a>
+              <div class="tooltip">Телеграм</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer container ta-center">
+  <p>© AKHMEDOV, 2026. Экспо-видеопроизводство полного цикла.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
