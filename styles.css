@@ -370,6 +370,9 @@ a:hover { color: var(--accent); }
   width: 2px;
   background: rgba(255, 255, 255, 0.08);
   z-index: 2;
+  /* Мягкое растворение линии в блюр/прозрачность на нижнем кончике */
+  mask-image: linear-gradient(to bottom, #000 0%, #000 85%, rgba(0,0,0,0.3) 95%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 85%, rgba(0,0,0,0.3) 95%, transparent 100%);
 }
 .prod-timeline__bar {
   position: absolute;
@@ -378,38 +381,11 @@ a:hover { color: var(--accent); }
   width: 100%;
   height: 0%;
   background: linear-gradient(180deg, var(--accent) 0%, #ff8533 100%);
-  box-shadow: 0 0 12px var(--accent-glow);
+  box-shadow: 0 0 14px var(--accent-glow);
   will-change: height;
-  transition: height 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: height 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.prod-timeline__playhead {
-  position: absolute;
-  left: 50%;
-  top: 0%;
-  transform: translate(-50%, -50%);
-  width: 14px;
-  height: 24px;
-  background: var(--accent);
-  border-radius: 4px;
-  box-shadow: 0 0 16px var(--accent), 0 0 30px var(--accent-glow);
-  z-index: 5;
-  pointer-events: none;
-  will-change: top;
-  /* Плавное примагничивание (Easy-Ease) */
-  transition: top 0.45s cubic-bezier(0.25, 1, 0.5, 1);
-}
-.prod-timeline__playhead::after {
-  content: '';
-  position: absolute;
-  bottom: -6px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 6px solid var(--accent);
-}
+
 .prod-step {
   position: relative;
   display: flex;
@@ -436,20 +412,21 @@ a:hover { color: var(--accent); }
   align-items: center;
   justify-content: center;
   z-index: 4;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
 }
 .prod-step__marker .marker-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.2);
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition: background-color 0.35s ease, transform 0.35s ease;
 }
 .prod-step__content {
   width: 44%;
   cursor: pointer;
   user-select: none;
-  opacity: 0.65;
+  opacity: 0.6;
   display: flex;
   flex-direction: column;
   transition: opacity 0.35s ease;
@@ -481,22 +458,12 @@ a:hover { color: var(--accent); }
   margin: 0;
   line-height: 1.25;
   transition: color 0.35s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
 }
-.prod-step.left .prod-step__title { justify-content: flex-end; }
-.prod-step.right .prod-step__title { justify-content: flex-start; }
 
-.step-toggle-arrow {
-  font-size: 14px;
-  color: #555861;
-  transition: transform 0.3s ease, color 0.3s ease;
-  display: inline-block;
-}
 .prod-step__content:hover { opacity: 0.9; }
 .prod-step__content:hover .prod-step__title { color: #B0B5C2; }
 
+/* Подсветка активного и пройденных шагов */
 .prod-step.passed .prod-step__content,
 .prod-step.open .prod-step__content { opacity: 1; }
 .prod-step.passed .prod-step__num,
@@ -506,29 +473,26 @@ a:hover { color: var(--accent); }
   color: #ffffff;
   text-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
 }
-.prod-step.passed .step-toggle-arrow,
-.prod-step.open .step-toggle-arrow { color: var(--muted); }
-.prod-step.passed .prod-step__marker {
+.prod-step.passed .prod-step__marker,
+.prod-step.open .prod-step__marker {
   border-color: var(--accent);
   box-shadow: 0 0 12px var(--accent-glow);
 }
-.prod-step.passed .prod-step__marker .marker-dot {
+.prod-step.passed .prod-step__marker .marker-dot,
+.prod-step.open .prod-step__marker .marker-dot {
   background: var(--accent);
   transform: scale(1.35);
 }
-.prod-step.open .step-toggle-arrow {
-  transform: rotate(180deg);
-  color: var(--accent);
-}
+
 .prod-step__body {
   max-height: 0;
   opacity: 0;
   overflow: hidden;
-  transition: max-height 0.4s cubic-bezier(0.2, 1, 0.3, 1), opacity 0.3s ease, margin-top 0.3s ease;
+  transition: max-height 0.45s cubic-bezier(0.2, 1, 0.3, 1), opacity 0.35s ease, margin-top 0.35s ease;
   width: 100%;
 }
 .prod-step.open .prod-step__body {
-  max-height: 200px;
+  max-height: 240px;
   opacity: 1;
   margin-top: 14px;
 }
@@ -891,7 +855,6 @@ body.no-scroll { overflow: hidden; }
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
     z-index: 99998;
     box-sizing: border-box;
-    
     transform: translateY(-130%);
     opacity: 0;
     pointer-events: none;
@@ -959,11 +922,6 @@ body.no-scroll { overflow: hidden; }
   .prod-timeline__track { 
     left: 20px !important; 
     transform: translateX(-50%) !important; 
-  }
-  
-  .prod-timeline__playhead { 
-    left: 50% !important; 
-    transform: translate(-50%, -50%) !important; 
   }
   
   .prod-step {

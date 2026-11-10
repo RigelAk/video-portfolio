@@ -100,90 +100,153 @@ document.querySelectorAll('.fade-in-up').forEach((el) => io.observe(el));
 })();
 
 // ========================================================
-// Интерактивный Timeline с Playhead (С примагничиванием по easy-ease)
+// Интерактивный Timeline: Авторазворот, плавное заполнение и скролл
 // ========================================================
 (function initTimeline() {
   const timeline = document.getElementById('prodTimeline');
   const track = document.querySelector('.prod-timeline__track');
   const bar = document.getElementById('timelineBar');
-  const playhead = document.getElementById('timelinePlayhead');
   const steps = document.querySelectorAll('.prod-step');
+  const portfolioSec = document.getElementById('portfolio');
 
-  if (!timeline || !track || !bar || !playhead || !steps.length) return;
+  if (!timeline || !track || !bar || !steps.length) return;
 
+  let isAutoScrolling = false;
+  let autoScrollTimeout = null;
+
+  // Клик по пункту — плавный скролл так, чтобы маркер встал на активную линию триггера
   steps.forEach((step) => {
     const content = step.querySelector('.prod-step__content');
     const marker = step.querySelector('.prod-step__marker');
 
-    function toggleStep() {
-      const isOpen = step.classList.contains('open');
-      steps.forEach((s) => s.classList.remove('open'));
-      if (!isOpen) {
-        step.classList.add('open');
-      }
-      requestUpdate();
+    function handleStepClick(e) {
+      e.preventDefault();
+      const currentMarker = step.querySelector('.prod-step__marker');
+      if (!currentMarker) return;
+
+      const triggerRatio = 0.46; // Координата триггера на экране
+      const triggerY = window.innerHeight * triggerRatio;
+      const markerRect = currentMarker.getBoundingClientRect();
+      const targetScrollY = window.pageYOffset + markerRect.top - triggerY;
+
+      // Раскрываем выбранный шаг
+      steps.forEach((s) => {
+        s.classList.remove('open');
+        s.classList.remove('passed');
+      });
+      step.classList.add('open');
+      step.classList.add('passed');
+
+      isAutoScrolling = true;
+      clearTimeout(autoScrollTimeout);
+
+      window.scrollTo({
+        top: Math.max(0, targetScrollY),
+        behavior: 'smooth',
+      });
+
+      // Пересчитываем положение линии под выбранный шаг
+      const trackRect = track.getBoundingClientRect();
+      const markerCenterY = (markerRect.top + markerRect.height / 2) - trackRect.top;
+      const pct = Math.max(0, Math.min(100, (markerCenterY / trackRect.height) * 100));
+      bar.style.height = `${pct}%`;
+
+      autoScrollTimeout = setTimeout(() => {
+        isAutoScrolling = false;
+        requestUpdate();
+      }, 700);
     }
 
-    if (content) content.addEventListener('click', toggleStep);
-    if (marker) marker.addEventListener('click', toggleStep);
+    if (content) content.addEventListener('click', handleStepClick);
+    if (marker) marker.addEventListener('click', handleStepClick);
   });
 
-  function updateTimelinePlayhead() {
+  function updateTimelineOnScroll() {
+    if (isAutoScrolling) return;
+
     const trackRect = track.getBoundingClientRect();
     const trackHeight = trackRect.height;
     if (trackHeight <= 0) return;
 
-    // Рассчитываем точные относительные позиции маркеров (в %)
-    const stepPositions = [];
+    const winHeight = window.innerHeight;
+    const triggerY = winHeight * 0.46;
+
+    // Собираем точные координаты маркеров
+    const stepData = [];
     steps.forEach((step, idx) => {
       const marker = step.querySelector('.prod-step__marker');
       if (marker) {
         const markerRect = marker.getBoundingClientRect();
-        const markerCenterY = (markerRect.top + markerRect.height / 2) - trackRect.top;
-        const pct = Math.max(0, Math.min(100, (markerCenterY / trackHeight) * 100));
-        stepPositions.push({ idx, pct, markerTop: markerRect.top });
+        const markerCenterRel = (markerRect.top + markerRect.height / 2) - trackRect.top;
+        const pct = Math.max(0, Math.min(100, (markerCenterRel / trackHeight) * 100));
+        stepData.push({
+          idx,
+          step,
+          markerTop: markerRect.top,
+          markerCenterRel,
+          pct,
+        });
       }
     });
 
-    if (!stepPositions.length) return;
+    if (!stepData.length) return;
 
-    const winHeight = window.innerHeight;
-    const triggerY = winHeight * 0.5; // Триггерная линия экрана
+    const first = stepData[0];
+    const last = stepData[stepData.length - 1];
 
-    // Определяем шаг, к которому ближе всего текущая прокрутка
-    let closestStep = stepPositions[0];
-    let minDistance = Infinity;
-
-    stepPositions.forEach((pos) => {
-      const dist = Math.abs(pos.markerTop - triggerY);
-      if (dist < minDistance) {
-        minDistance = dist;
-        closestStep = pos;
-      }
-    });
-
-    // Магнитная привязка: если мы до первого шага — стоим на первом, если после последнего — на последнем
-    const firstStep = stepPositions[0];
-    const lastStep = stepPositions[stepPositions.length - 1];
-
-    let targetPercent = closestStep.pct;
-    if (firstStep.markerTop > triggerY) {
-      targetPercent = firstStep.pct;
-    } else if (lastStep.markerTop < triggerY) {
-      targetPercent = lastStep.pct;
+    // Проверяем блок портфолио
+    let portfolioTop = Infinity;
+    if (portfolioSec) {
+      portfolioTop = portfolioSec.getBoundingClientRect().top;
     }
 
-    // Применяем позицию с аппаратным CSS-переходом easy ease
-    bar.style.height = `${targetPercent}%`;
-    playhead.style.top = `${targetPercent}%`;
+    // 1. До первого пункта ("Бриф и подготовка"): ничего не выбрано, линия = 0%
+    if (first.markerTop > triggerY + 40) {
+      bar.style.height = '0%';
+      steps.forEach((s) => {
+        s.classList.remove('open');
+        s.classList.remove('passed');
+      });
+      return;
+    }
 
-    // Подсвечиваем пройденные и текущие шаги
-    stepPositions.forEach((pos) => {
-      const stepEl = steps[pos.idx];
-      if (pos.pct <= targetPercent + 0.5) {
-        stepEl.classList.add('passed');
+    // 2. Листаем ниже к блоку "Портфолио": линия плавно заполняется до конца и уходит в блюр-градиент
+    if (portfolioTop <= triggerY + 80 || last.markerTop < triggerY - 140) {
+      bar.style.height = '100%';
+      steps.forEach((s) => {
+        s.classList.add('passed');
+      });
+      return;
+    }
+
+    // 3. Находим активный шаг, ближе всего находящийся к триггеру
+    let activeIdx = -1;
+    stepData.forEach((item, index) => {
+      if (item.markerTop <= triggerY + 45) {
+        activeIdx = index;
+      }
+    });
+
+    if (activeIdx === -1) {
+      activeIdx = 0;
+    }
+
+    const activeItem = stepData[activeIdx];
+
+    // Плавно доводим линию до маркера текущего активного шага
+    bar.style.height = `${activeItem.pct}%`;
+
+    // Подсвечиваем и автоматически раскрываем текущий пункт, сворачивая остальные
+    stepData.forEach((item, index) => {
+      if (index === activeIdx) {
+        item.step.classList.add('open');
+        item.step.classList.add('passed');
+      } else if (index < activeIdx) {
+        item.step.classList.remove('open');
+        item.step.classList.add('passed');
       } else {
-        stepEl.classList.remove('passed');
+        item.step.classList.remove('open');
+        item.step.classList.remove('passed');
       }
     });
   }
@@ -192,7 +255,7 @@ document.querySelectorAll('.fade-in-up').forEach((el) => io.observe(el));
   function requestUpdate() {
     if (!ticking) {
       window.requestAnimationFrame(() => {
-        updateTimelinePlayhead();
+        updateTimelineOnScroll();
         ticking = false;
       });
       ticking = true;
@@ -201,7 +264,7 @@ document.querySelectorAll('.fade-in-up').forEach((el) => io.observe(el));
 
   window.addEventListener('scroll', requestUpdate, { passive: true });
   window.addEventListener('resize', requestUpdate);
-  updateTimelinePlayhead();
+  updateTimelineOnScroll();
 })();
 
 // ========================================================
@@ -228,7 +291,6 @@ function vkEmbedUrl(cfg) {
 
 const fan = document.getElementById('fan');
 const fanWrapper = document.querySelector('.portfolio-wrapper');
-const portfolioSection = document.getElementById('portfolio');
 const cards = fan ? [...fan.querySelectorAll('.card')] : [];
 const closeBtn = document.getElementById('portfolioClose');
 const header = document.querySelector('.site-header');
