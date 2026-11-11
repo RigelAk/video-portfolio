@@ -306,13 +306,13 @@ a:hover { color: var(--accent); }
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.32;
+  opacity: 0.45;
   filter: saturate(120%) contrast(105%);
 }
 .hero__video-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, rgba(15, 16, 18, 0.55) 0%, rgba(15, 16, 18, 0.95) 100%);
+  background: radial-gradient(circle at center, rgba(15, 16, 18, 0.45) 0%, rgba(15, 16, 18, 0.90) 100%);
 }
 .hero__content {
   position: relative;
@@ -953,5 +953,22 @@ body.no-scroll { overflow: hidden; }
     border-left: 2px solid var(--accent);
     padding-left: 12px;
     padding-right: 0;
+  }
+
+  /* Видимость фонового видео на мобильных */
+  .hero__video {
+    opacity: 0.55;
+    filter: saturate(115%) contrast(105%) brightness(1.12);
+    object-position: center 40%;   /* ближе к сюжету, а не к «пустому» низу */
+  }
+  .hero__video-overlay {
+    background: linear-gradient(180deg,
+      rgba(15,16,18,0.30) 0%,
+      rgba(15,16,18,0.55) 45%,
+      rgba(15,16,18,0.90) 100%);
+  }
+  /* Читаемость текста — локально, а не за счёт всего кадра */
+  .hero__content {
+    text-shadow: 0 1px 14px rgba(0,0,0,0.7);
   }
 }
